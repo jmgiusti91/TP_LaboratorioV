@@ -1,6 +1,7 @@
 package example.juangiusti.com.tplaboratoriov;
 
 import android.graphics.BitmapFactory;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,10 +15,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
     private List<Noticia> noticias;
     private MyOnItemClick listener;
+    private Handler handler;
 
-    public MyAdapter(List<Noticia> noticias, MyOnItemClick listener) {
+    public MyAdapter(List<Noticia> noticias, MyOnItemClick listener, Handler handler) {
         this.noticias = noticias;
         this.listener = listener;
+        this.handler = handler;
         for(int i = 0; i < noticias.size(); i ++) {
             Log.d("TAG_NOTICIAS_ADAPTER", this.noticias.get(i).toString());
         }
@@ -36,19 +39,20 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         Noticia n = this.noticias.get(position);
 
         if(n.getImagenByte() == null) {
-            HiloDatos hd = new HiloDatos(n.getImagen(), EDatos.IMAGEN, n);
+            HiloDatos hd = new HiloDatos(n.getImagen(), EDatos.IMAGEN, this.handler, n, position);
             Thread t1 = new Thread(hd);
             t1.start();
-            synchronized (n) {
+            /*synchronized (n) {
                 try {
                     n.wait();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-            }
+            }*/
+        } else {
+            holder.imgNoticia.setImageBitmap(BitmapFactory.decodeByteArray(n.getImagenByte(), 0, n.getImagenByte().length));
         }
         holder.setLink(n.getLink());
-        holder.imgNoticia.setImageBitmap(BitmapFactory.decodeByteArray(n.getImagenByte(), 0, n.getImagenByte().length));
         holder.tituloNoticia.setText(n.getTitulo());
         holder.descripcionNoticia.setText(n.getDescripcion());
         holder.fechaNoticia.setText(n.getFecha().toString());

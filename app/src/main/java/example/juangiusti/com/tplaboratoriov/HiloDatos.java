@@ -13,6 +13,7 @@ public class HiloDatos implements Runnable {
     private Handler handler;
     private EDatos queBusco;
     private Noticia noticia;
+    private Integer posicion;
 
     public HiloDatos(String url, Handler handler, EDatos queBusco) {
         this.url = url;
@@ -20,10 +21,12 @@ public class HiloDatos implements Runnable {
         this.queBusco = queBusco;
     }
 
-    public HiloDatos(String url, EDatos queBusco, Noticia noticia) {
+    public HiloDatos(String url, EDatos queBusco, Handler handler, Noticia noticia, Integer posicion) {
         this.url = url;
         this.queBusco = queBusco;
         this.noticia = noticia;
+        this.handler = handler;
+        this.posicion = posicion;
     }
 
     @Override
@@ -42,14 +45,17 @@ public class HiloDatos implements Runnable {
         } else if(this.queBusco == EDatos.IMAGEN) {
             if(this.noticia != null) {
                 this.noticia.setImagenByte(retorno);
-                synchronized (this.noticia) {
+                /*synchronized (this.noticia) {
                     this.noticia.notify();
-                }
-            } else {
+                }*/
+                //this.handler.sendMessage()
                 msg.arg1 = 2;
-                Bitmap bitmap = BitmapFactory.decodeByteArray(retorno, 0, retorno.length);
-                msg.obj = bitmap;
+                //Bitmap bitmap = BitmapFactory.decodeByteArray(retorno, 0, retorno.length);
+                //msg.obj = bitmap;
+                msg.obj = this.posicion;
                 this.handler.sendMessage(msg);
+            } else {
+
             }
         }
     }

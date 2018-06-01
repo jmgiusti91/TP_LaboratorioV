@@ -13,6 +13,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
     private MyAdapter myAdapter;
     private Vista v;
     private Controlador c;
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,8 +22,8 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
         this.v = new Vista(this);
         this.c = new Controlador(v);
         v.getRv().setLayoutManager(new LinearLayoutManager(this));
-        Handler handler = new Handler(this);
-        HiloDatos hd1 = new HiloDatos("https://www.telam.com.ar/rss2/deportes.xml", handler, EDatos.TEXTO);
+        this.handler = new Handler(this);
+        HiloDatos hd1 = new HiloDatos("http://www.telam.com.ar/rss2/deportes.xml", handler, EDatos.TEXTO);
         Thread t1 = new Thread(hd1);
         t1.start();
     }
@@ -30,10 +31,11 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
     @Override
     public boolean handleMessage(Message msg) {
         if(msg.arg1 == 1) {
-           this.myAdapter = new MyAdapter(ParserXML.parsear(msg.obj.toString()), this);
+           this.myAdapter = new MyAdapter(ParserXML.parsear(msg.obj.toString()), this, this.handler);
            this.v.getRv().setAdapter(this.myAdapter);
         } else if(msg.arg1 == 2) {
-
+            //this.myAdapter.notifyDataSetChanged();
+            this.myAdapter.notifyItemChanged((Integer)msg.obj);
         }
         return false;
     }
