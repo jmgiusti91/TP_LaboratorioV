@@ -1,5 +1,6 @@
 package example.juangiusti.com.tplaboratoriov;
 
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity implements Handler.Callback, MyOnItemClick{
 
@@ -14,6 +17,26 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
     private Vista v;
     private Controlador c;
     private Handler handler;
+    private SharedPreferences prefs;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if(id == R.id.itemConfig) {
+            DialogConfig dc = new DialogConfig();
+            dc.show(getSupportFragmentManager(), "");
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
