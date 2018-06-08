@@ -12,32 +12,21 @@ import android.widget.ListView;
 public class ListenerListDialog implements AdapterView.OnItemClickListener{
 
     private ListView listView;
-    private String prefiero = "deportes";
+    private NotiConfig notiConfig;
 
     public ListenerListDialog(ListView listView) {
         this.listView = listView;
+        this.notiConfig = new NotiConfig();
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Object o = this.listView.getItemAtPosition(position);
-        String preferencia = o.toString();
-        Log.d("Opcion", preferencia);
-        if(preferencia.equalsIgnoreCase("Deportes")) {
-            this.prefiero = "Deportes".toLowerCase();
-        }
-        if(preferencia.equalsIgnoreCase("Economia")) {
-            this.prefiero = "Economia".toLowerCase();
-        }
-        if(preferencia.equalsIgnoreCase("Politica")) {
-            this.prefiero = "Politica".toLowerCase();
-        }
-        if(preferencia.equalsIgnoreCase("Internacional")) {
-            this.prefiero = "Internacional".toLowerCase();
-        }
+        Log.d("listView.itemPosition", o.toString());
+        this.notiConfig.setPrefiero(o.toString());
     }
 
-    public String getPrefiero() {
-        return prefiero;
+    public NotiConfig getNotiConfig() {
+        return notiConfig;
     }
 }

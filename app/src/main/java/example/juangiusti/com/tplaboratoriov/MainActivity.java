@@ -15,6 +15,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.prefs.Preferences;
+
 public class MainActivity extends AppCompatActivity implements Handler.Callback, MyOnItemClick, SearchView.OnQueryTextListener{
 
     private MyAdapter myAdapter;
@@ -23,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
     private Handler handler;
     private SharedPreferences prefs;
     private String url;
+    private NotiConfig notiConfig;
+    private List<Noticia> noticias;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -53,29 +59,13 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
         ab.setTitle("NotiView");
         SharedPreferences prefs = getSharedPreferences("noticias_config", Context.MODE_PRIVATE);
         if(prefs != null) {
-            if(prefs.getString("noticias", "deportes").equalsIgnoreCase("deportes")) {
-                this.url = "http://www.telam.com.ar/rss2/deportes.xml";
-            }
-            if(prefs.getString("noticias", "deportes").equalsIgnoreCase("economia")) {
-                this.url = "https://www.telam.com.ar/rss2/economia.xml";
-            }
-            if(prefs.getString("noticias", "deportes").equalsIgnoreCase("politica")) {
-                this.url = "https://www.telam.com.ar/rss2/politica.xml";
-            }
-            if(prefs.getString("noticias", "deportes").equalsIgnoreCase("internacional")) {
-                this.url = "https://www.telam.com.ar/rss2/internacional.xml";
-            }
+            this.obtenerNotiConfig(prefs);
         }
         this.v = new Vista(this);
         this.c = new Controlador(v);
         v.getRv().setLayoutManager(new LinearLayoutManager(this));
         this.handler = new Handler(this);
-        HiloDatos hd1 = new HiloDatos(this.url, handler, EDatos.TEXTO);
-        Thread t1 = new Thread(hd1);
-        t1.start();
-        //Intent i = new Intent(this, NoticiaActivity.class);
-        //i.putExtra("url", "noticia.getUrl()");
-        //startActivity(i);
+        this.buscarNoticias(this.notiConfig);
     }
 
     @Override
@@ -90,19 +80,55 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
         return false;
     }
 
+    public void obtenerNotiConfig(SharedPreferences prefs) {
+        if(prefs.getString("noticias", "").equalsIgnoreCase("deportes")) {
+            this.notiConfig = new NotiConfig("deportes", "http://www.telam.com.ar/rss2/deportes.xml");
+        }
+        if(prefs.getString("noticias", "").equalsIgnoreCase("economia")) {
+            this.notiConfig = new NotiConfig("economia", "https://www.telam.com.ar/rss2/economia.xml");
+        }
+        if(prefs.getString("noticias", "").equalsIgnoreCase("politica")) {
+            this.notiConfig = new NotiConfig("politica", "https://www.telam.com.ar/rss2/politica.xml");
+        }
+        if(prefs.getString("noticias", "").equalsIgnoreCase("internacional")) {
+            this.notiConfig = new NotiConfig("internacional", "https://www.telam.com.ar/rss2/internacional.xml");
+        }
+    }
+
+    public void buscarNoticias(NotiConfig notiConfig) {
+        this.url = notiConfig.getUrl();
+        HiloDatos hd1 = new HiloDatos(this.url, this.handler, EDatos.TEXTO);
+        Thread t1 = new Thread(hd1);
+        t1.start();
+    }
+
     @Override
     public void onItemClick(String link) {
         Log.d("TAG_LINK", link);
+        Intent i = new Intent(this, NoticiaActivity.class);
+        i.putExtra("url", link);
+        startActivity(i);
     }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
         Log.d("TextSubmit", query);
+        this.myAdapter.filter(query);
+        /*this.noticias = this.myAdapter.getNoticias();
+        List<Noticia> noticiasFiltro = new ArrayList<>();
+        for (Noticia n : noticias) {
+            if(n.getTitulo().equalsIgnoreCase(query)) {
+                noticiasFiltro.add(n);
+            }
+        }
+        this.myAdapter.setNoticias(noticiasFiltro);
+        this.myAdapter.notifyDataSetChanged();*/
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
+        this.myAdapter.filter(newText);
         //Se puede usar un pattern en Java o un indexOf para buscar coincidencias. Lo que se busca en el search, debe coincidir con el titulo de la noticia.
         Log.d("TextChange", newText);
         return false;

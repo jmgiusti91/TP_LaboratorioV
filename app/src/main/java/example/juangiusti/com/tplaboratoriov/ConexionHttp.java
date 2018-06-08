@@ -1,6 +1,8 @@
 package example.juangiusti.com.tplaboratoriov;
 
 
+import android.util.Log;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +16,11 @@ public class ConexionHttp {
     private byte[] byteArray;
 
     public byte[] devolverDatos(String strUrl) {
+        this.url = null;
+        this.connection = null;
+        this.byteArray = null;
         try {
+            Log.d("URL: ", strUrl);
             this.url = new URL(strUrl);
             this.connection = (HttpURLConnection) this.url.openConnection();
             this.connection.setRequestMethod("GET");

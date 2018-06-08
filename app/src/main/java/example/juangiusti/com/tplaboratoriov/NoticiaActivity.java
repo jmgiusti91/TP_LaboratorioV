@@ -28,7 +28,7 @@ public class NoticiaActivity extends AppCompatActivity {
         WebSettings ws = this.webView.getSettings();
         ws.setJavaScriptEnabled(true);
         //this.webView.loadUrl(url);
-        this.webView.loadUrl("http://www.telam.com.ar/notas/201806/287355-diegfo-maradona-hospital-colombia-instagram-saludo-rodillas-rusia-2018-futbol-copa-del-mundo.html");
+        this.webView.loadUrl(url);
         //this.webView.loadData("<h1>Aguante el Cuervo</h1>", "", "");
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);

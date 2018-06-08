@@ -20,16 +20,8 @@ public class DialogConfig extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder buil = new AlertDialog.Builder(getActivity());
-        ListenerListDialog lld = new ListenerListDialog(this.listViewConfig);
-        ListenerDialogConfig ldc = new ListenerDialogConfig(lld, getActivity());
-        buil.setTitle("Elija las noticias de su preferencia");
-        buil.setPositiveButton("CONFIRMAR", ldc);
-        buil.setNegativeButton("CANCELAR", ldc);
         View v = LayoutInflater.from(getActivity().getBaseContext()).inflate(R.layout.dialog_config_layout, null);
-        buil.setView(v);
         this.listViewConfig = (ListView) v.findViewById(R.id.listViewConfig);
-
-        this.listViewConfig.setOnItemClickListener(lld);
         List<String> listTipoNoticias = new ArrayList<>();
         listTipoNoticias.add("Deportes");
         listTipoNoticias.add("Economia");
@@ -37,6 +29,14 @@ public class DialogConfig extends DialogFragment {
         listTipoNoticias.add("Internacional");
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, listTipoNoticias);
         this.listViewConfig.setAdapter(arrayAdapter);
+        ListenerListDialog lld = new ListenerListDialog(this.listViewConfig);
+        ListenerDialogConfig ldc = new ListenerDialogConfig(lld, getActivity());
+        this.listViewConfig.setOnItemClickListener(lld);
+        buil.setTitle("Elija las noticias de su preferencia");
+        buil.setPositiveButton("CONFIRMAR", ldc);
+        buil.setNegativeButton("CANCELAR", ldc);
+        buil.setView(v);
+
         return buil.create();
         //return super.onCreateDialog(savedInstanceState);
     }

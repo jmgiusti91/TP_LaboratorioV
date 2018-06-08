@@ -23,8 +23,10 @@ public class ListenerDialogConfig implements DialogInterface.OnClickListener {
             //Log.d("ACEPTAR", "OK");
             SharedPreferences prefs = this.activity.getSharedPreferences("noticias_config", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
-            editor.putString("noticias", this.lld.getPrefiero());
+            editor.putString("noticias", this.lld.getNotiConfig().getPrefiero());
+            Log.d("getPrefiero()", this.lld.getNotiConfig().getPrefiero());
             editor.commit();
+            ((MainActivity)this.activity).buscarNoticias(this.lld.getNotiConfig());
         }
 
         if(which == AlertDialog.BUTTON_NEGATIVE) {

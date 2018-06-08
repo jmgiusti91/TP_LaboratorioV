@@ -9,11 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
     private List<Noticia> noticias;
+    private List<Noticia> noticiasCopy;
     private MyOnItemClick listener;
     private Handler handler;
 
@@ -21,9 +23,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         this.noticias = noticias;
         this.listener = listener;
         this.handler = handler;
-        for(int i = 0; i < noticias.size(); i ++) {
+        this.noticiasCopy = new ArrayList<>();
+        this.noticiasCopy.addAll(noticias);
+        /*for(int i = 0; i < noticias.size(); i ++) {
             Log.d("TAG_NOTICIAS_ADAPTER", this.noticias.get(i).toString());
-        }
+        }*/
     }
 
     @NonNull
@@ -61,5 +65,20 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
     @Override
     public int getItemCount() {
         return this.noticias.size();
+    }
+
+    public void filter(String text) {
+        this.noticias.clear();
+        if(text.isEmpty()){
+            this.noticias.addAll(this.noticiasCopy);
+        } else{
+            text = text.toLowerCase();
+            for(Noticia item: this.noticiasCopy){
+                if(item.getTitulo().toLowerCase().contains(text)){
+                    this.noticias.add(item);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 }
