@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">TPLaboratorioV</string>
     <string name="configuracion">Configuracion</string>
+    <string name="title_activity_noticia">NoticiaActivity</string>
 </resources>

@@ -63,6 +63,11 @@ public class ParserXML {
                             Date date = formatter.parse(fechaFinal);
                             noticia.setFecha(date);
                             noticias.add(noticia);
+                            titulo = "";
+                            link = "";
+                            imagen = "";
+                            descripcion = "";
+                            fecha = "";
                             //Log.d("TAG_XML", noticia.toString());
                             //Log.d("TAG_SIZE", noticias.size() + "");
                         }
