@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,8 +62,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         }
         holder.setLink(n.getLink());
         holder.tituloNoticia.setText(n.getTitulo());
-        holder.descripcionNoticia.setText(n.getDescripcion());
-        holder.fechaNoticia.setText(n.getFecha().toString());
+        StringBuilder sb = new StringBuilder("");
+        if(n.getDescripcion().length() < 170) {
+            sb.append(n.getDescripcion());
+        } else {
+            sb.append(n.getDescripcion().substring(0, 170).concat("..."));
+        }
+        holder.descripcionNoticia.setText(sb.toString());
+        SimpleDateFormat dt1 = new SimpleDateFormat("dd-MMM-yyyy");
+        holder.fechaNoticia.setText(dt1.format(n.getFecha()));
     }
 
     @Override
