@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
     private Handler handler;
     private SharedPreferences prefs;
     private String url;
-    private NotiConfig notiConfig;
+    private NotiConfig notiConfig = new NotiConfig("deportes", ParserXML.TELAM + "/rss2/deportes.xml");
     private List<Noticia> noticias;
 
     @Override
@@ -82,16 +82,16 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
 
     public void obtenerNotiConfig(SharedPreferences prefs) {
         if(prefs.getString("noticias", "").equalsIgnoreCase("deportes")) {
-            this.notiConfig = new NotiConfig("deportes", "http://www.telam.com.ar/rss2/deportes.xml");
+            this.notiConfig = new NotiConfig("deportes", ParserXML.TELAM + "/rss2/deportes.xml");
         }
         if(prefs.getString("noticias", "").equalsIgnoreCase("economia")) {
-            this.notiConfig = new NotiConfig("economia", "https://www.telam.com.ar/rss2/economia.xml");
+            this.notiConfig = new NotiConfig("economia", ParserXML.TELAM + "/rss2/economia.xml");
         }
         if(prefs.getString("noticias", "").equalsIgnoreCase("politica")) {
-            this.notiConfig = new NotiConfig("politica", "https://www.telam.com.ar/rss2/politica.xml");
+            this.notiConfig = new NotiConfig("politica", ParserXML.TELAM + "/rss2/politica.xml");
         }
         if(prefs.getString("noticias", "").equalsIgnoreCase("internacional")) {
-            this.notiConfig = new NotiConfig("internacional", "https://www.telam.com.ar/rss2/internacional.xml");
+            this.notiConfig = new NotiConfig("internacional", ParserXML.TELAM + "/rss2/internacional.xml");
         }
     }
 
@@ -132,5 +132,11 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
         //Se puede usar un pattern en Java o un indexOf para buscar coincidencias. Lo que se busca en el search, debe coincidir con el titulo de la noticia.
         Log.d("TextChange", newText);
         return false;
+    }
+
+    @Override
+    protected void onStop() {
+        this.myAdapter.getT1().interrupt();
+        super.onStop();
     }
 }

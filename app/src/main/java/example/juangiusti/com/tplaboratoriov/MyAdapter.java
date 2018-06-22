@@ -17,6 +17,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
     private List<Noticia> noticias;
     private List<Noticia> noticiasCopy;
     private MyOnItemClick listener;
+    private Thread t1;
     private Handler handler;
 
     public MyAdapter(List<Noticia> noticias, MyOnItemClick listener, Handler handler) {
@@ -42,9 +43,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Noticia n = this.noticias.get(position);
 
-        if(n.getImagenByte() == null) {
+        if(n.getImagenByte() == null && !n.getImagen().equalsIgnoreCase("")) {
             HiloDatos hd = new HiloDatos(n.getImagen(), EDatos.IMAGEN, this.handler, n, position);
-            Thread t1 = new Thread(hd);
+            this.t1 = new Thread(hd);
             t1.start();
             /*synchronized (n) {
                 try {
@@ -53,6 +54,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
                     e.printStackTrace();
                 }
             }*/
+        } else if(n.getImagen().equalsIgnoreCase("")) {
+            holder.imgNoticia.setImageResource(R.drawable.ic_launcher_background);
         } else {
             holder.imgNoticia.setImageBitmap(BitmapFactory.decodeByteArray(n.getImagenByte(), 0, n.getImagenByte().length));
         }
@@ -80,5 +83,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
             }
         }
         notifyDataSetChanged();
+    }
+
+    public Thread getT1() {
+        return t1;
     }
 }

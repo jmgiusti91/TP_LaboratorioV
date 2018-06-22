@@ -25,15 +25,15 @@ public class NotiConfig {
             this.prefiero = "deportes";
         }
         if(quePrefiero.equalsIgnoreCase("Economia")) {
-            this.url = "https://www.telam.com.ar/rss2/economia.xml";
+            this.url = "http://www.telam.com.ar/rss2/economia.xml";
             this.prefiero = "economia";
         }
         if(quePrefiero.equalsIgnoreCase("Politica")) {
-            this.url = "https://www.telam.com.ar/rss2/politica.xml";
+            this.url = "http://www.telam.com.ar/rss2/politica.xml";
             this.prefiero = "politica";
         }
         if(quePrefiero.equalsIgnoreCase("Internacional")) {
-            this.url = "https://www.telam.com.ar/rss2/internacional.xml";
+            this.url = "http://www.telam.com.ar/rss2/internacional.xml";
             this.prefiero = "internacional";
         }
     }

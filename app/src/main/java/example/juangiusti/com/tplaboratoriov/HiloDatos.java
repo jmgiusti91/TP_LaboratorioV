@@ -31,6 +31,9 @@ public class HiloDatos implements Runnable {
 
     @Override
     public void run() {
+        if(Thread.interrupted()) {
+            return;
+        }
         ConexionHttp chttp = new ConexionHttp();
         byte[] retorno = chttp.devolverDatos(this.url);
         Message msg = new Message();

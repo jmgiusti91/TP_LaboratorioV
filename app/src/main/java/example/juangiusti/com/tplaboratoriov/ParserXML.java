@@ -18,7 +18,7 @@ import java.util.List;
 public class ParserXML {
 
     private static List<Noticia> noticias;
-    private static final String TELAM = "https://www.telam.com.ar";
+    public static final String TELAM = "http://www.telam.com.ar";
 
     public static List<Noticia> parsear(String strXml) {
         XmlPullParser xml = Xml.newPullParser();
